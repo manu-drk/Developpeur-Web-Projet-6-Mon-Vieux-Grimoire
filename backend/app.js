@@ -6,19 +6,7 @@ const booksRoutes = require('./routes/books');
 const userRoutes = require('./routes/user');
 const app = express();
 
-// mongoose.connect(
-//     'mongodb+srv://manudossantos06:sNzqPNrysirXRTPU@clusterp6.eeylxga.mongodb.net/',
-//     {
-//         useNewUrlParser: true,
-//         useUnifiedTopology: true,
-//     },
-// )
-//     .then(() => console.log('Connexion à MongoDB réussie !'))
-//     .catch((err) => {
-//         console.error('Erreur de connexion à MongoDB :', err);
-//     });
 
-// Connexion à MongoDB
 mongoose.connect(
     `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/`,
     {
