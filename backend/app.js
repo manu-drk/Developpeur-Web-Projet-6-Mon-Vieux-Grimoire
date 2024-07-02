@@ -6,7 +6,7 @@ const booksRoutes = require('./routes/books');
 const userRoutes = require('./routes/user');
 const app = express();
 
-
+// Connexion à la base de données MongoDB avec mongoose
 mongoose.connect(
     `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/`,
     {

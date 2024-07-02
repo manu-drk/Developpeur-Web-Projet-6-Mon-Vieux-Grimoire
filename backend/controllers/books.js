@@ -1,7 +1,7 @@
 const Book = require("../models/book");
 const fs = require("fs");
 const path = require("path");
-console.log("Book model:", Book);
+
 
 exports.createBook = (req, res, next) => {
   console.log("req.file:", req.file);
@@ -63,6 +63,7 @@ const bookObject = req.file
     }
     : { ...req.body };
 
+// Supprime l'ID de l'utilisateur pour éviter les conflits
 delete bookObject._userId;
 
 Book.findOne({ _id: req.params.id })
@@ -70,6 +71,7 @@ Book.findOne({ _id: req.params.id })
     if (book.userId != req.auth.userId) {
         res.status(403).json({ message: "403: unauthorized request" });
     } else {
+// Supprime l'ancienne image si une nouvelle image est fournie
         const filename = book.imageUrl.split("/images/")[1];
         if (req.file) {
         const imagePath = path.join(__dirname, "..", "images", filename);
@@ -77,6 +79,7 @@ Book.findOne({ _id: req.params.id })
             if (err) console.log(err);
         });
         }
+        // Met à jour le livre avec les nouvelles données
         Book.updateOne(
         { _id: req.params.id },
         { ...bookObject, _id: req.params.id }
@@ -91,13 +94,16 @@ Book.findOne({ _id: req.params.id })
 //  Supprimer un livre
 
 exports.deleteBook = (req, res, next) => {
+  // Recherche le livre à supprimer par son ID
 Book.findOne({ _id: req.params.id })
     .then((book) => {
+      // Vérifie si l'utilisateur est autorisé à supprimer le livre
     if (book.userId != req.auth.userId) {
         res.status(401).json({ message: "Not authorized" });
     } else {
         const filename = book.imageUrl.split("/images/")[1];
         fs.unlink(`images/${filename}`, () => {
+          // Supprime le livre de la base de données
         Book.deleteOne({ _id: req.params.id })
             .then(() => res.status(200).json({ message: "Objet supprimé !" }))
             .catch((error) => res.status(401).json({ error }));
@@ -116,8 +122,7 @@ Book.find()
     .catch((error) => res.status(404).json({ error }));
 };
 
-//  créer une évaluation 
-
+//  créer une évaluation
 
 exports.createRating = (req, res, next) => {
 const rating = req.body.rating;
@@ -171,7 +176,7 @@ if (rating >= 0 && rating <= 5) {
 }
 };
 
-// GET => Récupération des 3 livres les mieux notés
+// Récupération des 3 livres les mieux notés
 
 exports.getBestRating = (req, res, next) => {
   // Récupération de tous les livres

@@ -8,10 +8,12 @@ const validatePassword = require('../middleware/validate-password');
     exports.signup = [validateEmail, validatePassword, (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
+        // Création d'un nouvel utilisateur avec l'email et le mot de passe haché
         const user = new User({
         email: req.body.email,
         password: hash
         });
+        // Enregistrement de l'utilisateur dans la base de données
         user.save()
         .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
         .catch(error => res.status(400).json({ error }));

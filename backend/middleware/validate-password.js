@@ -36,7 +36,7 @@ const validatePassword = (req, res, next) => {
     }
     next();
 };
-
+// Route pour l'inscription d'un utilisateur, avec validation du mot de passe
 app.post('/register', validatePassword, (req, res) => {
     res.status(200).send('Mot de passe valide !');
 });

@@ -4,6 +4,7 @@ const emailValidator = require('email-validator');
 const validateEmail = (req, res, next) => {
     const { email } = req.body;
 
+    // Vérification si l'adresse e-mail est absente ou invalide
     if (!email || !emailValidator.validate(email)) {
         return res.status(400).json({ error: 'Adresse e-mail invalide' });
     }
